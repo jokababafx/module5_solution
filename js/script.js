@@ -1,4 +1,5 @@
 $(function () {
+  // Same as document.addEventListener("DOMContentLoaded"...
 
   // Same as document.querySelector("#navbarToggle").addEventListener("blur",...
   $("#navbarToggle").blur(function (event) {
@@ -7,11 +8,9 @@ $(function () {
       $("#collapsable-nav").collapse('hide');
     }
   });
-
 });
 
 (function (global) {
-
   var dc = {};
 
   var homeHtmlUrl = "snippets/home-snippet.html";
@@ -35,7 +34,8 @@ $(function () {
     insertHtml(selector, html);
   };
 
-  // Return substitute of '{{propName}}' with propValue in given 'string'
+  // Return substitute of '{{propName}}'
+  // with propValue in given 'string'
   var insertProperty = function (string, propName, propValue) {
     var propToReplace = "{{" + propName + "}}";
     string = string.replace(new RegExp(propToReplace, "g"), propValue);
@@ -59,34 +59,44 @@ $(function () {
 
   // On page load (before images or CSS)
   document.addEventListener("DOMContentLoaded", function (event) {
-
     // On first load, show home view
     showLoading("#main-content");
     $ajaxUtils.sendGetRequest(
       allCategoriesUrl,
-      function (categories) {
-        var chosenCategory = chooseRandomCategory(categories);
-        $ajaxUtils.sendGetRequest(
-          homeHtmlUrl,
-          function (homeHtml) {
-            var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, 'randomCategoryShortName', chosenCategory.short_name);
-            insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
-          },
-          false
-        );
-      },
+      buildAndShowHomeHTML,
       true
     );
   });
 
   // Builds HTML for the home page based on categories array
   // returned from the server.
-  function chooseRandomCategory(categories) {
-    var randomArrayIndex = Math.floor(Math.random() * categories.length);
-    return categories[randomArrayIndex];
+  function buildAndShowHomeHTML(categories) {
+    // Load home snippet page
+    $ajaxUtils.sendGetRequest(
+      homeHtmlUrl,
+      function (homeHtml) {
+        // Call chooseRandomCategory here
+        var chosenCategory = chooseRandomCategory(categories);
+        var chosenCategoryShortName = chosenCategory.short_name;
+
+        // Substitute {{randomCategoryShortName}} in the home HTML snippet
+        var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, 'randomCategoryShortName', chosenCategoryShortName);
+
+        // Insert the produced HTML into the main page
+        insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
+      },
+      false
+    );
   }
 
-  // ... (rest of the existing code)
+  // Given array of category objects, returns a random category object.
+  function chooseRandomCategory(categories) {
+    // Choose a random index into the array (from 0 inclusively until array length (exclusively))
+    var randomArrayIndex = Math.floor(Math.random() * categories.length);
+
+    // return category object with that randomArrayIndex
+    return categories[randomArrayIndex];
+  }
 
   global.$dc = dc;
 
