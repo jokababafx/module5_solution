@@ -40,8 +40,7 @@ $(function () {
   // Return substitute of '{{propName}}' with propValue in given 'string'
   var insertProperty = function (string, propName, propValue) {
     var propToReplace = "{{" + propName + "}}";
-    var regExp = new RegExp(propToReplace, "g");
-    string = string.replace(regExp, propValue);
+    string = string.replace(new RegExp(propToReplace, "g"), propValue);
     return string;
   };
 
@@ -63,7 +62,8 @@ $(function () {
   // On page load (before images or CSS)
   document.addEventListener("DOMContentLoaded", function (event) {
 
-    // On first load, show home view
+
+        // On first load, show home view
     showLoading("#main-content");
     $ajaxUtils.sendGetRequest(
       allCategoriesUrl,
@@ -100,4 +100,3 @@ $(function () {
   global.$dc = dc;
 
 })(window);
-
