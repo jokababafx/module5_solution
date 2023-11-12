@@ -1,7 +1,5 @@
 $(function () {
 
-  // ... (existing code)
-
   // Same as document.querySelector("#navbarToggle").addEventListener("blur",...
   $("#navbarToggle").blur(function (event) {
     var screenWidth = window.innerWidth;
@@ -62,37 +60,30 @@ $(function () {
   // On page load (before images or CSS)
   document.addEventListener("DOMContentLoaded", function (event) {
 
-
-        // On first load, show home view
+    // On first load, show home view
     showLoading("#main-content");
     $ajaxUtils.sendGetRequest(
       allCategoriesUrl,
-      buildAndShowHomeHTML,
+      function (categories) {
+        var chosenCategory = chooseRandomCategory(categories);
+        $ajaxUtils.sendGetRequest(
+          homeHtmlUrl,
+          function (homeHtml) {
+            var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, 'randomCategoryShortName', chosenCategory.short_name);
+            insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
+          },
+          false
+        );
+      },
       true
     );
   });
 
   // Builds HTML for the home page based on categories array
   // returned from the server.
-  function buildAndShowHomeHTML(categories) {
-
-    // Load home snippet page
-    $ajaxUtils.sendGetRequest(
-      homeHtmlUrl,
-      function (homeHtml) {
-
-        // Here, call chooseRandomCategory, passing it retrieved 'categories'
-        var chosenCategory = chooseRandomCategory(categories);
-
-        // Substitute {{randomCategoryShortName}} in the home html snippet with the
-        // chosen category from STEP 2. Use existing insertProperty function for that purpose.
-        var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, 'randomCategoryShortName', chosenCategory.short_name);
-
-        // Insert the produced HTML in STEP 3 into the main page
-        insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
-      },
-      false
-    );
+  function chooseRandomCategory(categories) {
+    var randomArrayIndex = Math.floor(Math.random() * categories.length);
+    return categories[randomArrayIndex];
   }
 
   // ... (rest of the existing code)
@@ -100,3 +91,4 @@ $(function () {
   global.$dc = dc;
 
 })(window);
+
