@@ -1,3 +1,6 @@
+I apologize for the confusion. It seems I made an error in the code. Let me correct it. Please replace the previous code in `js/script.js` with the following:
+
+```javascript
 $(function () {
 
   // Same as document.querySelector("#navbarToggle").addEventListener("blur",...
@@ -143,47 +146,5 @@ $(function () {
         $ajaxUtils.sendGetRequest(
           categoryHtml,
           function (categoryHtml) {
-            // Switch CSS class active to menu button
-            switchMenuToActive();
-
-            var categoriesViewHtml =
-              buildCategoriesViewHtml(categories,
-                categoriesTitleHtml,
-                categoryHtml);
-            insertHtml("#main-content", categoriesViewHtml);
-          },
-          false);
-      },
-      false);
-  }
-
-  // Using categories data and snippets html
-  // build categories view HTML to be inserted into page
-  function buildCategoriesViewHtml(categories,
-    categoriesTitleHtml,
-    categoryHtml) {
-
-    var finalHtml = categoriesTitleHtml;
-    finalHtml += "<section class='row'>";
-
-    // Loop over categories
-    for (var i = 0; i < categories.length; i++) {
-      // Insert category values
-      var html = categoryHtml;
-      var name = "" + categories[i].name;
-      var short_name = categories[i].short_name;
-      html =
-        insertProperty(html, "name", name);
-      html =
-        insertProperty(html,
-          "short_name",
-          short_name);
-      finalHtml += html;
-    }
-
-    finalHtml += "</section>";
-    return finalHtml;
-  }
-
-  // Builds HTML for the
+            // Switch CSS class
 
