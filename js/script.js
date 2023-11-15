@@ -1,5 +1,4 @@
 $(function () {
-  // Same as document.addEventListener("DOMContentLoaded"...
 
   // Same as document.querySelector("#navbarToggle").addEventListener("blur",...
   $("#navbarToggle").blur(function (event) {
@@ -11,13 +10,16 @@ $(function () {
 });
 
 (function (global) {
+
   var dc = {};
 
   var homeHtmlUrl = "snippets/home-snippet.html";
-  var allCategoriesUrl = "https://coursera-jhu-default-rtdb.firebaseio.com/categories.json";
+  var allCategoriesUrl =
+    "https://coursera-jhu-default-rtdb.firebaseio.com/categories.json";
   var categoriesTitleHtml = "snippets/categories-title-snippet.html";
   var categoryHtml = "snippets/category-snippet.html";
-  var menuItemsUrl = "https://coursera-jhu-default-rtdb.firebaseio.com/menu_items/";
+  var menuItemsUrl =
+    "https://coursera-jhu-default-rtdb.firebaseio.com/menu_items/";
   var menuItemsTitleHtml = "snippets/menu-items-title.html";
   var menuItemHtml = "snippets/menu-item.html";
 
@@ -38,7 +40,8 @@ $(function () {
   // with propValue in given 'string'
   var insertProperty = function (string, propName, propValue) {
     var propToReplace = "{{" + propName + "}}";
-    string = string.replace(new RegExp(propToReplace, "g"), propValue);
+    string = string
+      .replace(new RegExp(propToReplace, "g"), propValue);
     return string;
   };
 
@@ -64,41 +67,8 @@ $(function () {
     $ajaxUtils.sendGetRequest(
       allCategoriesUrl,
       buildAndShowHomeHTML,
-      true
-    );
+      true); // Explicitly setting the flag to get JSON from server processed into an object literal
   });
 
-  // Builds HTML for the home page based on categories array
-  // returned from the server.
-  function buildAndShowHomeHTML(categories) {
-    // Load home snippet page
-    $ajaxUtils.sendGetRequest(
-      homeHtmlUrl,
-      function (homeHtml) {
-        // Call chooseRandomCategory here
-        var chosenCategory = chooseRandomCategory(categories);
-        var chosenCategoryShortName = chosenCategory.short_name;
-
-        // Substitute {{randomCategoryShortName}} in the home HTML snippet
-        var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, 'randomCategoryShortName', chosenCategoryShortName);
-
-        // Insert the produced HTML into the main page
-        insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
-      },
-      false
-    );
-  }
-
-  // Given array of category objects, returns a random category object.
-  function chooseRandomCategory(categories) {
-    // Choose a random index into the array (from 0 inclusively until array length (exclusively))
-    var randomArrayIndex = Math.floor(Math.random() * categories.length);
-
-    // return category object with that randomArrayIndex
-    return categories[randomArrayIndex];
-  }
-
-  global.$dc = dc;
-
-})(window);
+  //
 
