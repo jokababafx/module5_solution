@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 // to
 // *** finish ***
 // below.
-// We changed this code to retrieve all categories from the server instead of
+// I changed this code to retrieve all categories from the server instead of
 // simply requesting home HTML snippet. We now also have another function
 // called buildAndShowHomeHTML that will receive all the categories from the server
 // and process them: choose random category, retrieve home HTML snippet, insert that
